@@ -10,12 +10,12 @@
         />
       </div>
       <div class="movie-content">
-        <h1>Title: {{ movie.title }}</h1>
+        <h1>Title:  {{ movie.title }}</h1>
         <p class="movie-fact tagline">
-          <span>Tagline:</span>"{{ movie.tagline }}"
+          <span>Tagline: </span>"{{ movie.tagline }}"
         </p>
         <p class="movie-fact">
-          <span>Released:</span>
+          <span>Released: </span>
           {{
             new Date(movie.release_date).toLocaleString('en-us', {
               month: 'long',
@@ -25,10 +25,10 @@
           }}
         </p>
         <p class="movie-fact">
-          <span>Duration:</span> {{ movie.runtime }} minutes
+          <span>Duration: </span> {{ movie.runtime }} minutes
         </p>
         <p class="movie-fact">
-          <span>Revenue:</span>
+          <span>Revenue: </span>
           {{
             movie.revenue.toLocaleString('en-us', {
               style: 'currency',
@@ -36,7 +36,7 @@
             })
           }}
         </p>
-        <p class="movie-fact"><span>Overview:</span> {{ movie.overview }}</p>
+        <p class="movie-fact"><span>Overview: </span> {{ movie.overview }}</p>
       </div>
     </div>
   </div>
@@ -48,11 +48,16 @@ export default {
   name: 'SingleMovie',
   data() {
     return {
-      movie: null,
+      movie: '',
     }
   },
   async fetch() {
     await this.getSingleMovie()
+  },
+  head() {
+    return {
+      title: this.movie.title,
+    }
   },
   fetchDelay: 1000,
   methods: {
