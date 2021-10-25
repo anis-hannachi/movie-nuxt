@@ -10,11 +10,17 @@
         placeholder="Search"
         @keyup.enter="$fetch"
       />
-      <button v-show="searchInput !== ''" class="button">Clear Search</button>
+      <button v-show="searchInput !== ''" class="button" @click="clearSearch">
+        Clear Search
+      </button>
     </div>
+
+    <!-- Loading -->
+    <loading  v-if="$fetchState.pending"/>
+
     <!-- Movies -->
-    <div class="container movies">
-      <!-- Search -->
+    <div v-else class="container movies">
+      <!-- Searched Movies -->
       <div v-if="searchInput !== ''" id="movie-grid" class="movies-grid">
         <div
           v-for="(movie, index) in searchedMovies"
@@ -53,6 +59,7 @@
           </div>
         </div>
       </div>
+      <!-- Now streaming -->
       <div v-else id="movie-grid" class="movies-grid">
         <div v-for="(movie, index) in movies" :key="index" class="movie">
           <div class="movie-img">
@@ -93,7 +100,9 @@
 
 <script>
 import axios from 'axios'
+import Loading from '../components/Loading.vue'
 export default {
+  components: { Loading },
   data() {
     return {
       movies: [],
@@ -108,6 +117,7 @@ export default {
     }
     await this.searchMovies()
   },
+  fetchDelay: 1000,
   methods: {
     async getMovies() {
       const data = axios.get(
@@ -126,6 +136,10 @@ export default {
       result.data.results.forEach((movie) => {
         this.searchedMovies.push(movie)
       })
+    },
+    clearSearch() {
+      this.searchInput = ''
+      this.searchedMovies = []
     },
   },
 }
